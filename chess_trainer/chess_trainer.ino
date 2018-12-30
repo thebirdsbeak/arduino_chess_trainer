@@ -2,6 +2,7 @@
 #define NUM_LEDS 64
 #define DATA_PIN 3
 #define BRIGHTNESS 32
+CRGB leds[NUM_LEDS];
 
 #define A1 0
 #define B1 1
@@ -69,45 +70,47 @@
 #define A8 63
 
 #define K 0xFF0000
-#define Q 0x00FF00
-#define N 0x0000FF
+#define Q 0xFF44DD
+#define N 0x00FF00
 #define B 0xFFFF00
-#define R 0xFF44DD
+#define R 0x0000FF
 #define P 0xFFFFFF
+#define k 0xFF0000
+#define q 0xFF44DD
+#define n 0x00FF00
+#define b 0xFFFF00
+#define r 0x0000FF
+#define p 0xFFFFFF
 
-CRGB leds[NUM_LEDS];
+  int startpieces[16] = {A1, B1, C1, D1, E1, F1, G1, H1, A8, B8, C8, D8, E8, F8, G8, H8};
+  long pieces[16] = {R, N, B, Q, K, B, N, R, r, n, b, q, k, b, n, r};
+  
+  int startpawns [16] = {A2, B2, C2, D2, E2, F2, G2, H2, A7, B7, C7, D7, E7, F7, G7, H8};
+  long pawns[16] = {P, P, P, P, P, P, P, P, p, p, p, p, p, p, p, p};
 
-void setup() { FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+void setup() { 
+  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
   FastLED.setBrightness( BRIGHTNESS );
   Serial.begin(9600);
-int backrows[16] = {A1, B1, C1, D1, E1, F1, G1, H1, A8, B8, C8, D8, E8, F8, G8, H8};
-long firstpos[16] = {R, N, B, Q, K, B, N, R, R, N, B, Q, K, B, N, R};
 
-for(int i = 8; i < 16; i++){ 
-  leds[i] = P;
-      FastLED.show();
-}
-for(int i = 48; i < 56; i++){ 
-  leds[i] = P;
-      FastLED.show();
-}
-
-
-for(int i = 0; i < 16; i++){ 
-    int square = backrows[i];
-    long piece = firstpos[i];
-    setSquare(square, piece);
-}
+  for(int i = 0; i < 16; i++) { 
+      int square = startpawns[i];
+      long piece = pawns[i];
+      setSquare(square, piece);
+  }
+  for(int i = 0; i < 16; i++) { 
+      int square = startpieces[i];
+      long piece = pieces[i];
+      setSquare(square, piece);
+  }
 }
 
 void setSquare(int square, long piece) {
-
 leds[square] = piece;
       FastLED.show();
 }
 
 
-    void loop() {
+void loop() {
     }
-
-
+   
